@@ -8,7 +8,7 @@ namespace Panada\Router;
  *
  * @author Nurahmadie <nurahmadie@gmail.com>
  */
-class Routes extends \Panada\Utilities\Factory
+class Routes extends \Panada\Utility\Factory
 {
     private $urlStaticMap = [
         'GET' =>    [],
