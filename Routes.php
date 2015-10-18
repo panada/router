@@ -47,15 +47,7 @@ class Routes extends \Panada\Utility\Factory
 
     public static function defaults($name, $value = null, $pattern = null)
     {
-        if (!is_null($value)) {
-            if ($pattern) {
-                self::$defaults[$name] = array($value, $pattern);
-            } else {
-                self::$defaults[$name] = array($value);
-            }
-        }
-
-        return self::$defaults[$name];
+        return self::$defaults[$name] = array($value, $pattern);
     }
     public static function pattern($name, $regex = null)
     {
