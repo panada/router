@@ -163,7 +163,7 @@ class Routes extends \Panada\Utility\Factory
             $options['url'] = array_filter($urls, 'strlen');
         }
 
-        if (!is_array(self::$aliases[$name])) {
+        if (!isset(self::$aliases[$name])) {
             self::$aliases[$name] = array();
         }
         array_push(self::$aliases[$name], $options);
