@@ -185,7 +185,7 @@ class Routes extends \Panada\Utility\Factory
     {
         self::$variables = array();
         self::$alias_name = array();
-        list($subdomain, $domain) = self::parse_httphost($_SERVER['HTTP_HOST']);
+        list($subdomain, $domain) = self::parse_httphost($_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PROTOCOL']);
         $request = array(
             'method' => $_SERVER['REQUEST_METHOD'],
             'protocol' => preg_replace('/[^a-z]/i', '', $_SERVER['SERVER_PROTOCOL']),
