@@ -28,6 +28,7 @@ class Routes extends \Panada\Utility\Factory
             return array($matched[1], $matched[2]);
         }
     }
+    
     private static function parse_httphost($host)
     {
         list($host, $port) = preg_split("/\:/", $host);
@@ -49,6 +50,7 @@ class Routes extends \Panada\Utility\Factory
     {
         return self::$defaults[$name] = array($value, $pattern);
     }
+    
     public static function pattern($name, $regex = null)
     {
         if ($regex) {
@@ -61,6 +63,7 @@ class Routes extends \Panada\Utility\Factory
             }
         }
     }
+    
     public static function route($name, $array, $value)
     {
         $options = array();
@@ -170,29 +173,31 @@ class Routes extends \Panada\Utility\Factory
 
         return $options;
     }
+    
     public static function get($name)
     {
         if (array_key_exists($name, self::$variables)) {
             return self::$variables[$name];
         }
     }
+    
     public static function get_alias()
     {
         return self::$alias_name;
     }
 
-    public static function find()
+    public static function find($dispatcher)
     {
         self::$variables = array();
         self::$alias_name = array();
-        list($subdomain, $domain) = self::parse_httphost($_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PROTOCOL']);
+        list($subdomain, $domain) = self::parse_httphost($dispatcher['host'].':'.$dispatcher['port']);
         $request = array(
-            'method' => $_SERVER['REQUEST_METHOD'],
-            'protocol' => preg_replace('/[^a-z]/i', '', $_SERVER['SERVER_PROTOCOL']),
+            'method' => $dispatcher['method'],
+            'protocol' => preg_replace('/[^a-z]/i', '', $dispatcher['scheme']),
             'subdomain' => $subdomain,
             'domain' => $domain,
             'port' => $_SERVER['SERVER_PORT'],
-            'url' => array_filter(explode('/', $_SERVER['REQUEST_URI']), 'strlen'),
+            'url' => array_filter(explode('/', $dispatcher['path']), 'strlen'),
         );
         foreach (self::$aliases as $alias_name => $alias_group) {
             foreach ($alias_group as $index => $alias) {
