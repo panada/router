@@ -16,20 +16,20 @@ namespace Panada\router;
  */
 class Routes extends \Panada\Utility\Factory
 {
-    public static $aliases = array();
-    public static $defaults = array();
-    public static $patterns = array();
-    public static $variables = array();
+    public static $aliases = [];
+    public static $defaults = [];
+    public static $patterns = [];
+    public static $variables = [];
     public static $alias_name = '';
 
-    private static function is_pattern($name)
+    private static function isPattern($name)
     {
         if (preg_match('/(.*)?:(.*)/', $name, $matched)) {
             return array($matched[1], $matched[2]);
         }
     }
     
-    private static function parse_httphost($host)
+    private static function parseHTTPhost($host)
     {
         list($host, $port) = preg_split("/\:/", $host);
         if ($tld = strrchr($host, '.')) {
@@ -40,15 +40,15 @@ class Routes extends \Panada\Utility\Factory
             }
             $sld = substr($domain, strlen($subdomain) + ($subdomain != ''));
 
-            return array($subdomain, "$sld.$tld");
+            return [$subdomain, "$sld.$tld"];
         } else {
-            return array(null, $host);
+            return [null, $host];
         }
     }
 
     public static function defaults($name, $value = null, $pattern = null)
     {
-        return self::$defaults[$name] = array($value, $pattern);
+        return self::$defaults[$name] = [$value, $pattern];
     }
     
     public static function pattern($name, $regex = null)
@@ -66,99 +66,99 @@ class Routes extends \Panada\Utility\Factory
     
     public static function route($name, $array, $value)
     {
-        $options = array();
+        $options = [];
 
-        list($method_value, $method_pattern) = self::defaults('method');
+        list($methodValue, $methodPattern) = self::defaults('method');
         if (array_key_exists('method', $array)) {
             if (!is_array($array['method'])) {
-                $array['method'] = array($array['method']);
+                $array['method'] = [$array['method']];
             }
             foreach ($array['method'] as $method) {
-                if (self::is_pattern($method)) {
-                    $method_pattern = $method;
+                if (self::isPattern($method)) {
+                    $methodPattern = $method;
                 } else {
-                    $method_value = $method;
+                    $methodValue = $method;
                 }
             }
         }
 
-        list($protocol_value, $protocol_pattern) = self::defaults('protocol');
+        list($protocolValue, $protocolPattern) = self::defaults('protocol');
         if (array_key_exists('protocol', $array)) {
             if (!is_array($array['protocol'])) {
-                $array['protocol'] = array($array['protocol']);
+                $array['protocol'] = [$array['protocol']];
             }
             foreach ($array['protocol'] as $protocol) {
-                if (self::is_pattern($protocol)) {
-                    $protocol_pattern = $protocol;
+                if (self::isPattern($protocol)) {
+                    $protocolPattern = $protocol;
                 } else {
-                    $protocol_value = $protocol;
+                    $protocolValue = $protocol;
                 }
             }
         }
 
-        list($subdomain_value, $subdomain_pattern) = self::defaults('subdomain');
+        list($subdomainValue, $subdomainPattern) = self::defaults('subdomain');
         if (array_key_exists('subdomain', $array)) {
             if (!is_array($array['subdomain'])) {
-                $array['subdomain'] = array($array['subdomain']);
+                $array['subdomain'] = [$array['subdomain']];
             }
             foreach ($array['subdomain'] as $subdomain) {
-                if (self::is_pattern($subdomain)) {
-                    $subdomain_pattern = $subdomain;
+                if (self::isPattern($subdomain)) {
+                    $subdomainPattern = $subdomain;
                 } else {
-                    $subdomain_value = $subdomain;
+                    $subdomainValue = $subdomain;
                 }
             }
         }
 
-        list($domain_value, $domain_pattern) = self::defaults('domain');
+        list($domainValue, $domainPattern) = self::defaults('domain');
         if (array_key_exists('domain', $array)) {
             if (!is_array($array['domain'])) {
-                $array['domain'] = array($array['domain']);
+                $array['domain'] = [$array['domain']];
             }
             foreach ($array['domain'] as $domain) {
-                if (self::is_pattern($domain)) {
-                    $domain_pattern = $domain;
+                if (self::isPattern($domain)) {
+                    $domainPattern = $domain;
                 } else {
-                    $domain_value = $domain;
+                    $domainValue = $domain;
                 }
             }
         }
 
-        list($port_value, $port_pattern) = self::defaults('port');
+        list($portValue, $portPattern) = self::defaults('port');
         if (array_key_exists('port', $array)) {
             if (!is_array($array['port'])) {
                 $array['port'] = array($array['port']);
             }
             foreach ($array['port'] as $port) {
-                if (self::is_pattern($port)) {
-                    $port_pattern = $port;
+                if (self::isPattern($port)) {
+                    $portPattern = $port;
                 } else {
-                    $port_value = $port;
+                    $portValue = $port;
                 }
             }
         }
 
-        list($port_value, $port_pattern) = self::defaults('port');
+        list($portValue, $portPattern) = self::defaults('port');
         if (array_key_exists('port', $array)) {
             if (!is_array($array['port'])) {
                 $array['port'] = array($array['port']);
             }
             foreach ($array['port'] as $port) {
-                if (self::is_pattern($port)) {
-                    $port_pattern = $port;
+                if (self::isPattern($port)) {
+                    $portPattern = $port;
                 } else {
-                    $port_value = $port;
+                    $portValue = $port;
                 }
             }
         }
 
         $options = array(
-            'method' => array($method_value, $method_pattern),
-            'protocol' => array($protocol_value, $protocol_pattern),
-            'subdomain' => array($subdomain_value, $subdomain_pattern),
-            'domain' => array($domain_value, $domain_pattern),
-            'port' => array($port_value, $port_pattern),
-            'url' => array(),
+            'method' => array($methodValue, $methodPattern),
+            'protocol' => array($protocolValue, $protocolPattern),
+            'subdomain' => array($subdomainValue, $subdomainPattern),
+            'domain' => array($domainValue, $domainPattern),
+            'port' => array($portValue, $portPattern),
+            'url' => [],
             'value' => $value,
         );
         $urls = explode('/', $array['url']);
@@ -167,7 +167,7 @@ class Routes extends \Panada\Utility\Factory
         }
 
         if (!isset(self::$aliases[$name])) {
-            self::$aliases[$name] = array();
+            self::$aliases[$name] = [];
         }
         array_push(self::$aliases[$name], $options);
 
@@ -181,16 +181,16 @@ class Routes extends \Panada\Utility\Factory
         }
     }
     
-    public static function get_alias()
+    public static function getAlias()
     {
         return self::$alias_name;
     }
 
     public static function find($dispatcher)
     {
-        self::$variables = array();
-        self::$alias_name = array();
-        list($subdomain, $domain) = self::parse_httphost($dispatcher['host'].':'.$dispatcher['port']);
+        self::$variables = [];
+        self::$alias_name = [];
+        list($subdomain, $domain) = self::parseHTTPhost($dispatcher['host'].':'.$dispatcher['port']);
         $request = array(
             'method' => $dispatcher['method'],
             'protocol' => preg_replace('/[^a-z]/i', '', $dispatcher['scheme']),
@@ -201,7 +201,7 @@ class Routes extends \Panada\Utility\Factory
         );
         foreach (self::$aliases as $alias_name => $alias_group) {
             foreach ($alias_group as $index => $alias) {
-                $variables = array();
+                $variables = [];
                 //~ Method
                 list($method, $pattern) = (is_array($alias['method'])) ? $alias['method'] : array($alias['method']);
                 if (!$pattern) {
@@ -331,7 +331,7 @@ class Routes extends \Panada\Utility\Factory
                             $url = '';
                             $params = array_reverse($params);
                             foreach ($alias as $value) {
-                                if (list($var, $pattern) = self::is_pattern($value)) {
+                                if (list($var, $pattern) = self::isPattern($value)) {
                                     if (!$var) {
                                         $var = $pattern;
                                     }
