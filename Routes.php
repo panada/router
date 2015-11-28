@@ -183,21 +183,21 @@ class Routes extends \Panada\Utility\Factory
     
     public static function getAlias()
     {
-        return self::$alias_name;
+        return self::$aliasName;
     }
 
-    public static function find($dispatcher)
+    public static function find($uriComponents)
     {
         self::$variables = [];
         self::$alias_name = [];
-        list($subdomain, $domain) = self::parseHTTPhost($dispatcher['host'].':'.$dispatcher['port']);
+        list($subdomain, $domain) = self::parseHTTPhost($uriComponents['host'].':'.$uriComponents['port']);
         $request = array(
-            'method' => $dispatcher['method'],
-            'protocol' => preg_replace('/[^a-z]/i', '', $dispatcher['scheme']),
+            'method' => $uriComponents['method'],
+            'protocol' => preg_replace('/[^a-z]/i', '', $uriComponents['scheme']),
             'subdomain' => $subdomain,
             'domain' => $domain,
             'port' => $_SERVER['SERVER_PORT'],
-            'url' => array_filter(explode('/', $dispatcher['path']), 'strlen'),
+            'url' => array_filter(explode('/', $uriComponents['path']), 'strlen'),
         );
         foreach (self::$aliases as $alias_name => $alias_group) {
             foreach ($alias_group as $index => $alias) {
